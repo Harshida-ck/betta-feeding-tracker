@@ -18,7 +18,8 @@ export default function FeedingTable({ meals, onToggleMeal }) {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-pink-100/40 bg-slate-50/40 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
@@ -92,6 +93,74 @@ export default function FeedingTable({ meals, onToggleMeal }) {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile cards */}
+        <div className="md:hidden space-y-3 p-3">
+          {meals.map((meal) => (
+            <div
+              key={meal.id}
+              className={`rounded-2xl border p-4 shadow-sm transition-all ${
+                meal.fed
+                  ? "bg-emerald-50/60 border-emerald-100"
+                  : "bg-white/70 border-pink-100"
+              }`}
+            >
+              {/* Top row */}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="w-11 h-11 shrink-0 flex items-center justify-center rounded-2xl bg-white shadow-sm border border-pink-100 text-lg">
+                    {meal.icon}
+                  </span>
+
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-slate-700 truncate">
+                      {meal.name}
+                    </h3>
+
+                    <span className="inline-block mt-1 bg-white/80 text-slate-600 px-2.5 py-1 rounded-lg text-[11px] font-bold border border-pink-100/80">
+                      {meal.pellets} {meal.pellets === 1 ? "pellet" : "pellets"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Status */}
+                <span
+                  className={`shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                    meal.fed
+                      ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
+                      : "bg-rose-100 text-rose-600 border border-rose-200"
+                  }`}
+                >
+                  {meal.fed ? "💖 FED" : "⏳ PENDING"}
+                </span>
+              </div>
+
+              {/* Bottom row */}
+              <div className="mt-4 pt-3 border-t border-pink-100/60 flex items-center justify-between gap-3">
+                <div className="text-xs font-semibold text-slate-400">
+                  {meal.fed ? (
+                    <span className="bg-emerald-50 text-emerald-600 px-2 py-1 rounded-md font-bold">
+                      🕐 {meal.time}
+                    </span>
+                  ) : (
+                    "Not fed yet"
+                  )}
+                </div>
+
+                <button
+                  onClick={() => onToggleMeal(meal.id)}
+                  className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all duration-200 shadow-sm active:scale-95 ${
+                    meal.fed
+                      ? "bg-white text-slate-600 border border-slate-200"
+                      : "bg-gradient-to-r from-pink-400 to-rose-400 text-white shadow-pink-200"
+                  }`}
+                >
+                  {meal.fed ? "Undo" : "Mark Fed ✨"}
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
